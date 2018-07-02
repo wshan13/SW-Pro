@@ -34,6 +34,7 @@ public class pro_01_2_SORTED_ARRAY {
 		
 		for(int i = 0 ; i < n ; i ++) {
 			for(int j = 0 ; j < m ; j ++) {
+				System.out.println("arrA[" + i + "] + arrB[" + j + "] == X, " + arrA[i] + " + " + arrB[j] + " == " + X);
 				if(arrA[i] + arrB[j] == X) {
 					result++;
 				}
