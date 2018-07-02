@@ -32,11 +32,14 @@ public class pro_01_2_SORTED_ARRAY {
 		
 		int result = 0;
 		
+		int _j_last = m-1;
 		for(int i = 0 ; i < n ; i ++) {
-			for(int j = 0 ; j < m ; j ++) {
-				System.out.println("arrA[" + i + "] + arrB[" + j + "] == X, " + arrA[i] + " + " + arrB[j] + " == " + X);
+			for(int j = Math.min(m-1, _j_last) ; j >= 0 ; j --) {
+				System.out.println("arrA[" + i + "] + arrB[" + j + "] == X, " + (arrA[i] + arrB[j]));
 				if(arrA[i] + arrB[j] == X) {
+					_j_last = j-1;	System.out.println("_j_last : " + _j_last);
 					result++;
+					i++;
 				}
 			}
 		}
