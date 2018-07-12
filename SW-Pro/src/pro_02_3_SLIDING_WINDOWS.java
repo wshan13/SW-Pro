@@ -3,7 +3,9 @@ import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.StringTokenizer;
 
 public class pro_02_3_SLIDING_WINDOWS {
@@ -35,6 +37,12 @@ public class pro_02_3_SLIDING_WINDOWS {
 		int max = getMax(dataArrayInit);
 		int sum = getSum(dataArrayInit);
 		bw.write(min + " " + max + " " + sum + "\n");
+		
+		// 초기값 deque에 세팅
+		Deque<Integer> minDeque = new ArrayDeque<>();
+		minDeque.push(min);
+		Deque<Integer> maxDeque = new ArrayDeque<>();
+		maxDeque.push(max);
 
 		// sliding window 처리
 		int pop;	// 나가는 값 
@@ -45,8 +53,8 @@ public class pro_02_3_SLIDING_WINDOWS {
 			pop = dataArray[x-1];		// 나가는 값 
 			push = dataArray[x+K-1];	// 들어오는 값
 			
-			min = getMin(min, pop, push);
-			max = getMax(min, pop, push);
+			min = getMin(minDeque, pop, push);
+			max = getMax(maxDeque, pop, push);
 			sum = sum-pop+push;
 			
 			bw.write(min + " " + max + " " + sum + "\n");
@@ -60,22 +68,50 @@ public class pro_02_3_SLIDING_WINDOWS {
 		return arr[0];
 	}
 	
-	static int getMin(int currMin, int pop, int push) {
-		
-		if(currMin <= pop) {	// 나가는 값이 현재 최소값 보다 크면 무시
-			return currMin;
-		} else {
-			
+	static int getMin(Deque<Integer> minDeque, int pop, int push) {
+		System.out.println("minDeque : " + minDeque);
+		System.out.println("out : " + pop);
+		System.out.println("in : " + push);
+
+		// 왼쪽 첫번째 값이 들어오는 값보다 크면 계속해서 제거하고
+		while(!minDeque.isEmpty() && minDeque.peekFirst() > push) {
+			minDeque.removeFirst();
 		}
-		return currMin;
+		
+		// 들어오는 값을 제일 왼쪽에 넣는다.
+		minDeque.addFirst(push);
+		
+		System.out.println("minDeque : " + minDeque);
+		System.out.println("minDeque lowest : " + minDeque.peekFirst());
+
+		return minDeque.peekFirst();
 	}
 	
 	static int getMax(int[] arr) {
 		return arr[arr.length-1];
 	}
 	
-	static int getMax(int currMax, int pop, int push) {
-		return currMax;
+	static int getMax(Deque<Integer> maxDeque, int pop, int push) {
+		//System.out.println("out : " + pop);
+		//System.out.println("in : " + push);
+		//System.out.println("maxDeque : " + maxDeque);
+		//System.out.println("maxDeque highest : " + maxDeque.peekLast());
+		
+		if(maxDeque.peekLast() < push) {
+			maxDeque.removeLast();
+			maxDeque.addLast(push);
+		} else {
+			if(maxDeque.peekFirst() < push) {
+				maxDeque.removeFirst();
+			}
+			maxDeque.addFirst(push);
+		}
+
+		if(maxDeque.peekLast() == pop) {
+			maxDeque.removeLast();
+		}
+		
+		return maxDeque.peekLast();
 	}
 	
 	static int getSum(int[] arr) {
