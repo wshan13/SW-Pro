@@ -58,6 +58,7 @@ public class pro_02_3_SLIDING_WINDOWS {
 			sum = sum-pop+push;
 			
 			bw.write(min + " " + max + " " + sum + "\n");
+
 		}
 
 		bw.flush();
